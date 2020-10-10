@@ -31,7 +31,7 @@ export const signin = createAsyncThunk(
   {
     condition: (_user, { getState }) => {
       const state = getState() as RootState;
-      if (state.user.user || state.user.isLoading) return false;
+      if (state.auth.user || state.auth.isLoading) return false;
     },
   }
 );

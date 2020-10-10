@@ -5,7 +5,7 @@ import { signout } from "./redux/auth/auth.slice";
 import { RootState } from "./redux/root.reducer";
 
 const App = () => {
-  const isSignedIn = useSelector((state: RootState) => !!state.user.user);
+  const isSignedIn = useSelector((state: RootState) => !!state.auth.user);
   const dispatch = useDispatch();
 
   if (isSignedIn) {
