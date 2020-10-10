@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { signin } from "../../redux/user/user.slice";
+import { signin } from "../../redux/auth/auth.slice";
 import {
   StyledForm,
   StyledLabel,
@@ -17,7 +17,7 @@ const Signin = () => {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(signin({ username, password }));
+    dispatch(signin({ serverUrl, username, password }));
   };
 
   return (
