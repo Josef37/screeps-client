@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { postJSON } from "../../utils/fetch";
 import { RootState } from "../root.reducer";
+
+const URL = 'http://localhost:21025'
 
 /* Type Definitions */
 
@@ -18,7 +21,7 @@ type User = Partial<{
 }>
 
 type UserCredentials = {
-    name: string,
+    username: string,
     password: string
 }
 
@@ -34,7 +37,25 @@ type UserState = {
 export const signin = createAsyncThunk(
     'user/signin',
     async (user: UserCredentials): Promise<User> => {
-        return { username: user.name, password: !!user.password }
+        const res = await postJSON(
+            `${URL}/api/auth/signin`,
+            { email: user.username, password: user.password }
+        )
+        if (res.status !== 200) {
+            throw new Error(await res.text())
+        }
+        const { token } = await res.json()
+
+        const res2 = await fetch(
+            `${URL}/api/auth/me`,
+            {
+                headers: {
+                    'X-Token': token,
+                    'X-Username': token
+                }
+            }
+        )
+        return res2.json()
     }, {
     condition: (_user, { getState }) => {
         const state = getState() as RootState;
