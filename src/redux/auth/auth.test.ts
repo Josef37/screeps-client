@@ -1,32 +1,32 @@
-import authReducer, { signin, signout } from './auth.slice'
+import authReducer, { registerFailure, registerStart, registerSuccess, signin, signinFailure, signinStart, signinSuccess, signout } from './auth.slice'
 import configureMockStore from 'redux-mock-store'
 import { expectActionTypes } from '../../utils/test-utils'
 import thunk from 'redux-thunk'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
+import { register } from './auth.thunks'
 
 const signInData = {
   serverUrl: 'serverUrl',
   username: 'username',
   password: 'password'
 }
+const registerData = {
+  ...signInData,
+  email: 'email'
+}
 const mockStore = configureMockStore([thunk])
 const axiosMock = new MockAdapter(axios)
 
 describe('auth reducer', () => {
   it('should sign out', () => {
-    expect(
-      authReducer({ isLoading: false, user: { username: 'test' } }, signout())
-    ).toEqual({ isLoading: false })
+    expect(authReducer({ isLoading: false, user: { username: 'test' } }, signout()))
+      .toEqual({ isLoading: false })
   })
 
   it('should set loading state on sign in', () => {
-    expect(
-      authReducer(
-        { isLoading: false },
-        signin.pending(signin.pending.type, signInData)
-      )
-    ).toEqual({ isLoading: true })
+    expect(authReducer({ isLoading: false }, signinStart()))
+      .toEqual({ isLoading: true })
   })
 })
 
@@ -38,28 +38,16 @@ describe('auth thunks', () => {
     axiosMock.onPost('/api/auth/signin').reply(401, 'Unauthorized')
 
     return store.dispatch(signin(signInData) as any).then(() => {
-      expectActionTypes(store, [signin.pending.type, signin.rejected.type])
+      expectActionTypes(store, [signinStart.type, signinFailure.type])
     })
   })
 
   it('should create a signin fulfilled action for valid credentials', () => {
     const store = mockStore({ auth: {} })
-    const token = '1234'
-    axiosMock
-      .onPost('/api/auth/signin')
-      .reply(200, { token })
-      .onGet(
-        '/api/auth/me',
-        undefined,
-        expect.objectContaining({
-          'X-Token': token,
-          'X-Username': token
-        })
-      )
-      .reply(200, { username: 'u', password: true })
+    configureAxiosMockForSuccess()
 
     return store.dispatch(signin(signInData) as any).then(() => {
-      expectActionTypes(store, [signin.pending.type, signin.fulfilled.type])
+      expectActionTypes(store, [signinStart.type, signinSuccess.type])
     })
   })
 
@@ -79,3 +67,48 @@ describe('auth thunks', () => {
     })
   })
 })
+
+describe('Register thunk', () => {
+  beforeEach(() => axiosMock.reset())
+
+  it('should sign the user in on success', () => {
+    const store = mockStore({ auth: {} })
+    configureAxiosMockForSuccess()
+
+    store.dispatch(register(registerData) as any).then(() => {
+      expectActionTypes(
+        store,
+        [registerStart.type, registerSuccess.type, signinStart.type, signinSuccess.type]
+      )
+    })
+  })
+
+  it('should fail on server error', () => {
+    const store = mockStore({ auth: {} })
+    const errorMsg = 'There was something wrong...'
+    axiosMock.onPost('/api/register/submit').reply(200, { error: errorMsg })
+
+    store.dispatch(register(registerData) as any).then(() => {
+      expectActionTypes(store, [registerStart.type, registerFailure.type])
+      expect(store.getActions()[1].payload.message).toBe(errorMsg)
+    })
+  })
+})
+
+function configureAxiosMockForSuccess () {
+  const token = '1234'
+  axiosMock
+    .onPost('/api/auth/signin')
+    .reply(200, { token })
+    .onGet(
+      '/api/auth/me',
+      undefined,
+      expect.objectContaining({
+        'X-Token': token,
+        'X-Username': token
+      })
+    )
+    .reply(200, { username: 'u', password: true })
+    .onPost('/api/register/submit')
+    .reply(200, { ok: 1 })
+}

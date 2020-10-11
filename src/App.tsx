@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route, Redirect, Link } from 'react-router-dom'
 
 import SigninPage from './pages/signin/signin.component'
 import RegisterPage from './pages/register/register.component'
@@ -18,7 +18,7 @@ const App = () => {
         {isSignedIn ? <Redirect to='/' /> : <RegisterPage />}
       </Route>
       <Route path='/'>
-        <Redirect to='/signin' />
+        <Link to="/signin" style={{ fontSize: '10em' }}>Sign in</Link>
       </Route>
     </Switch>
   )

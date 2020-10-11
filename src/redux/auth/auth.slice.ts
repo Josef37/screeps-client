@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { signin } from './auth.thunks'
+import { signin, register } from './auth.thunks'
 
 const initialState: AuthState = {
   isLoading: false
@@ -12,32 +12,38 @@ const userSlice = createSlice({
     signout: (state) => {
       delete state.user
     },
-    signinStart: (state) => {
-      state.isLoading = true
-      delete state.error
-    },
+    signinStart: fetchStart,
     signinSuccess: (state, action: PayloadAction<AuthData>) => {
       Object.assign(state, action.payload)
-      state.isLoading = false
-      delete state.error
+      fetchSuccess(state)
     },
-    signinFailure: (state, action: PayloadAction<Error>) => {
-      state.isLoading = false
-      state.error = action.payload.message
-    }
+    signinFailure: fetchFailure,
+    registerStart: fetchStart,
+    registerSuccess: fetchSuccess,
+    registerFailure: fetchFailure
   }
 })
+
+function fetchStart (state: AuthState) {
+  state.isLoading = true
+  delete state.error
+}
+function fetchSuccess (state: AuthState) {
+  state.isLoading = false
+  delete state.error
+}
+function fetchFailure (state: AuthState, action: PayloadAction<Error>) {
+  state.isLoading = false
+  state.error = action.payload.message
+}
 
 // Export all action creators
 export const {
   signout,
-  signinStart,
-  signinSuccess,
-  signinFailure
+  signinStart, signinSuccess, signinFailure,
+  registerStart, registerSuccess, registerFailure
 } = userSlice.actions
-export { signin }
+export { signin, register }
 
 // Default export reducer
 export default userSlice.reducer
-
-export const register = (inputs: any) => { return null }
