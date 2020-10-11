@@ -1,9 +1,9 @@
-import * as React from "react";
-import { render } from "@testing-library/react";
-import { configureStore } from "@reduxjs/toolkit";
-import { Provider } from "react-redux";
-import rootReducer from "../redux/root.reducer";
-import { MockStoreEnhanced } from "redux-mock-store";
+import * as React from 'react'
+import { render } from '@testing-library/react'
+import { configureStore } from '@reduxjs/toolkit'
+import { Provider } from 'react-redux'
+import rootReducer from '../redux/root.reducer'
+import { MockStoreEnhanced } from 'redux-mock-store'
 
 const customRender = (
   ui: React.ReactElement,
@@ -11,28 +11,28 @@ const customRender = (
     initialState,
     store = configureStore({
       reducer: rootReducer,
-      preloadedState: initialState,
+      preloadedState: initialState
     }),
     ...renderOptions
   }: Partial<any>
 ) => {
   const Wrapper: React.FunctionComponent = ({ children }) => {
-    return <Provider store={store}>{children}</Provider>;
-  };
-  render(ui, { wrapper: Wrapper, ...renderOptions });
-};
+    return <Provider store={store}>{children}</Provider>
+  }
+  render(ui, { wrapper: Wrapper, ...renderOptions })
+}
 
-export * from "@testing-library/react";
-export { customRender as render };
+export * from '@testing-library/react'
+export { customRender as render }
 
 // Expect the action types in the store to be in the same order as expected
 export const expectActionTypes = (
   store: MockStoreEnhanced<unknown, {}>,
   expectedActionTypes: string[]
 ): void => {
-  const actions = store.getActions();
-  expect(actions.length).toBe(expectedActionTypes.length);
+  const actions = store.getActions()
+  expect(actions.length).toBe(expectedActionTypes.length)
   expectedActionTypes.forEach((type, i) =>
-    expect(actions[i]).toHaveProperty("type", type)
-  );
-};
+    expect(actions[i]).toHaveProperty('type', type)
+  )
+}

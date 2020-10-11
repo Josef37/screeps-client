@@ -10,28 +10,28 @@ type User = Partial<{
   steam: {};
   powerExperimentations: number;
   powerExperimentationTime: number;
-}>;
+}>
 
-type SigninFormData = {
+interface SigninFormData {
   serverUrl: string;
   username: string;
   password: string;
-};
+}
 
 type RegisterFormData = SigninFormData & {
   email: string;
-};
+}
 
-type AuthState = {
+interface AuthState {
   token?: string;
   user?: User;
   serverUrl?: string;
   error?: string;
   isLoading: boolean;
-};
+}
 
-type AuthData = {
+interface AuthData {
   user: User;
   token: string;
   serverUrl: string;
-};
+}
