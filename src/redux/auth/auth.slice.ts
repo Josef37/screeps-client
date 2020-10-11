@@ -12,29 +12,29 @@ const userSlice = createSlice({
     signout: (state) => {
       delete state.user;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(signin.pending, (state) => {
+    signinStart: (state) => {
       state.isLoading = true;
       delete state.error;
-    });
-    builder.addCase(
-      signin.fulfilled,
-      (state, action: PayloadAction<AuthData>) => {
-        Object.assign(state, action.payload);
-        state.isLoading = false;
-        delete state.error;
-      }
-    );
-    builder.addCase(signin.rejected, (state, action) => {
+    },
+    signinSuccess: (state, action: PayloadAction<AuthData>) => {
+      Object.assign(state, action.payload);
       state.isLoading = false;
-      state.error = action.error.message;
-    });
+      delete state.error;
+    },
+    signinFailure: (state, action: PayloadAction<Error>) => {
+      state.isLoading = false;
+      state.error = action.payload.message;
+    },
   },
 });
 
 // Export all action creators
-export const { signout } = userSlice.actions;
+export const {
+  signout,
+  signinStart,
+  signinSuccess,
+  signinFailure,
+} = userSlice.actions;
 export { signin };
 
 // Default export reducer

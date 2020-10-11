@@ -18,6 +18,10 @@ type SigninFormData = {
   password: string;
 };
 
+type RegisterFormData = SigninFormData & {
+  email: string;
+};
+
 type AuthState = {
   token?: string;
   user?: User;
