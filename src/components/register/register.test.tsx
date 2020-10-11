@@ -1,48 +1,54 @@
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
-import Signin from "./signin.component";
+import Register from "./register.component";
 
 import { useDispatch } from "react-redux";
 jest.mock("react-redux");
 
-describe("Signin component", () => {
+describe("Register component", () => {
   const dispatchMock = mockUseDispatch();
 
   beforeEach(() => {
     dispatchMock.mockReset();
-    render(<Signin />);
-  });
-
-  it("should not show email and password confirm fields", () => {
-    expect(() =>
-      screen.getByLabelText("E-Mail", { exact: false })
-    ).toThrowError("Unable to find a label with the text of");
-    expect(() =>
-      screen.getByLabelText("Confirm Password", { exact: false })
-    ).toThrowError("Unable to find a label with the text of");
+    render(<Register />);
   });
 
   it("should not dispatch on empty server url", () => {
     clearInput(screen.getByLabelText("Server URL"));
-    fireEvent.click(screen.getByText("Sign In", { selector: "button" }));
+    fireEvent.click(screen.getByText("Register", { selector: "button" }));
 
     expect(dispatchMock).not.toBeCalled();
   });
 
   it("should not dispatch on empty username", () => {
     clearInput(screen.getByLabelText("Username"));
-    fireEvent.click(screen.getByText("Sign In", { selector: "button" }));
+    fireEvent.click(screen.getByText("Register", { selector: "button" }));
 
     expect(dispatchMock).not.toBeCalled();
   });
 
-  it("should dispatch signin even when password is empty", () => {
+  it("should dispatch register even when password and email are empty", () => {
     setInputValue(screen.getByLabelText("Server URL"), "http://localhost");
     setInputValue(screen.getByLabelText("Username"), "username");
+    clearInput(screen.getByLabelText("E-Mail"));
     clearInput(screen.getByLabelText("Password"));
-    fireEvent.click(screen.getByText("Sign In", { selector: "button" }));
+    clearInput(screen.getByLabelText("Repeat Password", { exact: false }));
+    fireEvent.click(screen.getByText("Register", { selector: "button" }));
 
     expect(dispatchMock).toBeCalledTimes(1);
+  });
+
+  it("should not dispatch when password is not confirmed", () => {
+    setInputValue(screen.getByLabelText("Server URL"), "http://localhost");
+    setInputValue(screen.getByLabelText("Username"), "username");
+    setInputValue(screen.getByLabelText("Password"), "password");
+    setInputValue(
+      screen.getByLabelText("Repeat Password", { exact: false }),
+      "misspelled password"
+    );
+    fireEvent.click(screen.getByText("Register", { selector: "button" }));
+
+    expect(dispatchMock).not.toBeCalled();
   });
 });
 

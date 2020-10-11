@@ -39,3 +39,5 @@ export { signin };
 
 // Default export reducer
 export default userSlice.reducer;
+
+export const register = (inputs: any) => {};
