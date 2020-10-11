@@ -17,6 +17,7 @@ const Signin = () => {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!serverUrl || !username) return;
     dispatch(signin({ serverUrl, username, password }));
   };
 

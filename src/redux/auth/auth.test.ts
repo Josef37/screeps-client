@@ -1,5 +1,6 @@
 import authReducer, { signin, signout } from "./auth.slice";
-import configureMockStore, { MockStoreEnhanced } from "redux-mock-store";
+import configureMockStore from "redux-mock-store";
+import { expectActionTypes } from "../../utils/test-utils";
 import thunk from "redux-thunk";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
@@ -78,15 +79,3 @@ describe("auth thunks", () => {
     });
   });
 });
-
-// Expect the action types in the store to be in the same order as expected
-const expectActionTypes = (
-  store: MockStoreEnhanced<unknown, {}>,
-  expectedActionTypes: string[]
-): void => {
-  const actions = store.getActions();
-  expect(actions.length).toBe(expectedActionTypes.length);
-  expectedActionTypes.forEach((type, i) =>
-    expect(actions[i]).toHaveProperty("type", type)
-  );
-};
