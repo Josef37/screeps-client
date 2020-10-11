@@ -30,8 +30,8 @@ describe("Register component", () => {
   it("should dispatch register even when password and email are empty", () => {
     setInputValue(screen.getByLabelText("Server URL"), "http://localhost");
     setInputValue(screen.getByLabelText("Username"), "username");
-    clearInput(screen.getByLabelText("E-Mail"));
-    clearInput(screen.getByLabelText("Password"));
+    clearInput(screen.getByLabelText("E-Mail", { exact: false }));
+    clearInput(screen.getByLabelText("Password (can be empty)"));
     clearInput(screen.getByLabelText("Repeat Password", { exact: false }));
     fireEvent.click(screen.getByText("Register", { selector: "button" }));
 
@@ -41,7 +41,7 @@ describe("Register component", () => {
   it("should not dispatch when password is not confirmed", () => {
     setInputValue(screen.getByLabelText("Server URL"), "http://localhost");
     setInputValue(screen.getByLabelText("Username"), "username");
-    setInputValue(screen.getByLabelText("Password"), "password");
+    setInputValue(screen.getByLabelText("Password (can be empty)"), "password");
     setInputValue(
       screen.getByLabelText("Repeat Password", { exact: false }),
       "misspelled password"

@@ -1,12 +1,17 @@
 import React from "react";
-import { SigninContainer, StyledHeading } from "./signin.styles";
+import { Link } from "react-router-dom";
+
+import { StyledContainer, StyledHeading, StyledNotice } from "./signin.styles";
 import SigninForm from "../../components/signin/signin.component";
 
 const Signin = () => (
-  <SigninContainer>
+  <StyledContainer>
     <StyledHeading>Sign In</StyledHeading>
     <SigninForm />
-  </SigninContainer>
+    <StyledNotice>
+      Not already registered? <Link to="/register">Register now!</Link>
+    </StyledNotice>
+  </StyledContainer>
 );
 
 export default Signin;

@@ -67,7 +67,7 @@ const Auth: React.FC<AuthProps> = ({ isRegistration, handleSubmit }) => {
 
       {isRegistration ? (
         <StyledLabel>
-          E-Mail
+          E-Mail (optional)
           <StyledInput
             type="email"
             value={email}
@@ -77,7 +77,7 @@ const Auth: React.FC<AuthProps> = ({ isRegistration, handleSubmit }) => {
       ) : null}
 
       <StyledLabel>
-        Password
+        Password (can be empty)
         <StyledInput
           type="password"
           value={password}

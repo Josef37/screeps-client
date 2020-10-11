@@ -39,7 +39,7 @@ describe("Signin component", () => {
   it("should dispatch signin even when password is empty", () => {
     setInputValue(screen.getByLabelText("Server URL"), "http://localhost");
     setInputValue(screen.getByLabelText("Username"), "username");
-    clearInput(screen.getByLabelText("Password"));
+    clearInput(screen.getByLabelText("Password (can be empty)"));
     fireEvent.click(screen.getByText("Sign In", { selector: "button" }));
 
     expect(dispatchMock).toBeCalledTimes(1);

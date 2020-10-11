@@ -56,8 +56,14 @@ function setInputValues(inputs: {
 }) {
   setInputValue(screen.getByLabelText("Server URL"), inputs.serverUrl);
   setInputValue(screen.getByLabelText("Username"), inputs.username);
-  setInputValue(screen.getByLabelText("E-Mail"), inputs.email);
-  setInputValue(screen.getByLabelText("Password"), inputs.password);
+  setInputValue(
+    screen.getByLabelText("E-Mail", { exact: false }),
+    inputs.email
+  );
+  setInputValue(
+    screen.getByLabelText("Password (can be empty)"),
+    inputs.password
+  );
   setInputValue(
     screen.getByLabelText("Confirm", { exact: false }),
     inputs.confirmPassword

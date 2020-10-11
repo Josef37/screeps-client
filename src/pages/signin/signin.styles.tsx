@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const SigninContainer = styled.div`
+export const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -12,4 +12,9 @@ export const StyledHeading = styled.h2`
   margin: 0 0 1em;
   font-size: 2.4rem;
   font-weight: normal;
+`;
+
+export const StyledNotice = styled.span`
+  margin-top: 1.5em;
+  font-style: italic;
 `;
