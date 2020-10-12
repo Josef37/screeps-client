@@ -44,10 +44,7 @@ const signinAndGetToken = async (formData: SigninFormData): Promise<string> => {
 
   const res = await getAxiosBackendInstance(serverUrl).post(
     '/api/auth/signin',
-    {
-      email: username,
-      password
-    }
+    { email: username, password }
   )
   return res.data.token
 }
@@ -65,18 +62,11 @@ const registerUser = async (formData: RegisterFormData): Promise<void> => {
   if (!res.data.ok) throw new Error(res.data.error)
 }
 
-const getAxiosBackendInstance = (
-  baseURL: string,
-  token?: string,
-  serverPassword?: string
-) => {
+const getAxiosBackendInstance = (baseURL: string, token?: string) => {
   const config: AxiosRequestConfig = { baseURL, headers: {} }
   if (token) {
     config.headers['X-Token'] = token
     config.headers['X-Username'] = token
-  }
-  if (serverPassword) {
-    config.headers['X-Server-Password'] = serverPassword
   }
   return axios.create(config)
 }

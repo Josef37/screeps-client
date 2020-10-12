@@ -9,7 +9,7 @@ import _ from 'lodash'
 
 const symbolForDeleted = Symbol('deleted')
 
-export default function merge (oldIndex: Record<string, any>, diff: Record<string, any>) {
+export default function merge <T> (oldIndex: Record<string, T> = {}, diff: Record<string, T> = {}): Record<string, T> {
   diff = replaceDeletedEntriesWithSymbol(diff)
   const merged = _.merge(oldIndex, diff)
   return deleteSymbolEntries(merged)

@@ -18,7 +18,9 @@ const App = () => {
         {isSignedIn ? <Redirect to='/' /> : <RegisterPage />}
       </Route>
       <Route path='/'>
-        <Link to="/signin" style={{ fontSize: '10em' }}>Sign in</Link>
+        { isSignedIn
+          ? <h1>This is Screeps!</h1>
+          : <Link to="/signin" style={{ fontSize: '10em' }}>Sign in</Link> }
       </Route>
     </Switch>
   )
