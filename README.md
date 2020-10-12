@@ -1,3 +1,33 @@
+# Screeps Client
+
+An open-source client for the game [Screeps](https://screeps.com/). 
+
+**THIS IS A WORK IN PROGRESS**  
+You can't really use the client for now. If you want to have a basic client, see [keeshii's screeps-client](https://github.com/keeshii/screeps-client).
+
+## Introduction
+
+The server software is open-source. You can find it here: [screeps/screeps](https://github.com/screeps/screeps)
+
+This project is completely written in TypeScript using React and Redux. 
+
+I try to keep the code clean so development stays fun. So if you want to contribute, I kindly welcome you.
+
+## Server Setup
+
+```
+npm install screeps
+npm install screepsmod-auth
+npm install screepsmod-cors
+npx screeps init
+npx screeps start
+```
+
+This client uses screepsmod-auth for easy authentication.  
+screepsmod-cors is needed for accessing the client and server on different URLs.
+
+<hr>
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
