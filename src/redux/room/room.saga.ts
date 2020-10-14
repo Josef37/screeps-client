@@ -1,5 +1,5 @@
 
-import { all, call, put, takeLatest } from 'typed-redux-saga'
+import { put, takeLatest } from 'typed-redux-saga'
 import Socket from '../../api/socket'
 import { authSuccess, subscribe } from '../socket/socket.slice'
 
@@ -12,12 +12,6 @@ function * subscribeToRoom () {
   yield * put(subscribe({ name: channelName }))
 }
 
-function * onSocketAuthSuccess () {
-  yield * takeLatest(authSuccess, subscribeToRoom)
-}
-
 export default function * roomSaga () {
-  yield * all([
-    call(onSocketAuthSuccess)
-  ])
+  yield * takeLatest(authSuccess, subscribeToRoom)
 }
