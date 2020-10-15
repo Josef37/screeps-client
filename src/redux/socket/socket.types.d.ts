@@ -4,5 +4,5 @@ interface SocketMessage {
 }
 
 type Channel = {
-  name: string
+  channelName: string
 }

@@ -1,34 +1,31 @@
-import { createEntityAdapter, createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import merge from '../../utils/merge'
-import { message } from '../socket/socket.slice'
 
-const roomAdapter = createEntityAdapter<Room>({
-  selectId: room => room.name
-})
+const initialState: RoomState = {
+  objects: {},
+  users: {}
+}
 
 const roomSlice = createSlice({
   name: 'room',
-  initialState: roomAdapter.getInitialState(),
-  reducers: {},
-  extraReducers: builder => {
-    builder.addCase(message, (state, { payload: { channelName, data } }) => {
-      const match = channelName.match(/room:(?<name>.*)/)
-      if (!match) return
-      const roomName = match.groups!.name
-      const currentData = roomAdapter.getSelectors().selectById(state, roomName)
-      const newData = currentData ? mergeRooms(currentData, data) : { ...data, name: roomName }
-      roomAdapter.upsertOne(state, newData)
+  initialState,
+  reducers: {
+    setRoom: (state, action: PayloadAction<string>) => ({
+      ...initialState,
+      prevId: state.id,
+      id: action.payload
+    }),
+    updateRoom: (state, { payload: diff }: PayloadAction<RoomDiff>) => {
+      state.gameTime = diff.gameTime
+      state.users = merge(state.users, diff.users)
+      state.objects = merge(state.objects, diff.objects)
+    },
+    removeRoom: (state) => ({
+      ...initialState,
+      prevId: state.id
     })
-    /** @todo listen to unsubscribe: remove room entity */
   }
 })
 
-function mergeRooms (currentRoom: Room, diff: RoomDiff): Room {
-  const { gameTime } = diff
-  const { name } = currentRoom
-  const users = merge(currentRoom.users, diff.users)
-  const objects = merge(currentRoom.objects, diff.objects)
-  return { name, gameTime, users, objects }
-}
-
+export const { setRoom, updateRoom, removeRoom } = roomSlice.actions
 export default roomSlice.reducer

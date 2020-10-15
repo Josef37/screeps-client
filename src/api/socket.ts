@@ -11,8 +11,8 @@ export default class Socket {
     this.sock = new SockJS(socketUrl)
 
     this.sock.onopen = () => {
-      this.authenticateSocket()
       store.dispatch(open())
+      this.authenticateSocket()
     }
 
     this.sock.onmessage = this.onMessage
@@ -35,12 +35,12 @@ export default class Socket {
     return this.instance
   }
 
-  subscribeChannel ({ name }: Channel) {
-    this.sock.send(`subscribe ${name}`)
+  subscribeChannel ({ channelName }: Channel) {
+    this.sock.send(`subscribe ${channelName}`)
   }
 
-  unsubscribeChannel ({ name }: Channel) {
-    this.sock.send(`unsubscribe ${name}`)
+  unsubscribeChannel ({ channelName }: Channel) {
+    this.sock.send(`unsubscribe ${channelName}`)
   }
 
   private authenticateSocket () {

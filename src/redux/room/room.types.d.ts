@@ -1,7 +1,10 @@
-type Room =
-  RoomInit
-  & Partial<RoomDiff>
-  & {name: string}
+type RoomState = {
+  id?: string,
+  prevId?: string,
+  objects: Record<string, RoomObject>,
+  users: Record<string, RoomUser>,
+  gameTime?: number,
+}
 
 type RoomInit = {
   objects: Record<string, RoomObject>,
@@ -10,8 +13,8 @@ type RoomInit = {
 
 type RoomDiff = {
   objects: Record<string, RoomObject>,
-  gameTime: number,
   users?: Record<string, RoomUser>
+  gameTime: number,
 }
 
 type RoomObject = {

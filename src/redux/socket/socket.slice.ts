@@ -14,7 +14,7 @@ enum SocketState {
 }
 
 const channelsAdapter = createEntityAdapter<Channel>({
-  selectId: channel => channel.name
+  selectId: channel => channel.channelName
 })
 
 const initialState = {
@@ -47,7 +47,7 @@ const socketSlice = createSlice({
       state.channels = channelsAdapter.addOne(state.channels, action)
     },
     unsubscribe: (state, action: PayloadAction<Channel>) => {
-      state.channels = channelsAdapter.removeOne(state.channels, action.payload.name)
+      state.channels = channelsAdapter.removeOne(state.channels, action.payload.channelName)
     }
   }
 })
